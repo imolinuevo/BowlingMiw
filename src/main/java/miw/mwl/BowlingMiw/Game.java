@@ -64,10 +64,8 @@ public class Game {
 	}
 
 	private boolean hasPlayerName(String playerName) {
-		for (String player : this.players) {
-			if (player.equals(playerName)) {
-				return true;
-			}
+		if (this.players.contains(playerName)) {
+			return true;
 		}
 		return false;
 	}
