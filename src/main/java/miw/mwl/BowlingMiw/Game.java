@@ -6,6 +6,7 @@ import java.util.List;
 import miw.mwl.BowlingMiw.Exceptions.GameFullException;
 import miw.mwl.BowlingMiw.Exceptions.InvalidPlayerNumberException;
 import miw.mwl.BowlingMiw.Exceptions.PlayerNameEmptyException;
+import miw.mwl.BowlingMiw.Exceptions.RepeatedPlayernameException;
 
 public class Game {
 
@@ -38,19 +39,36 @@ public class Game {
 	public int getPlayerNumber() {
 		return this.playerNumber;
 	}
-	
-	public boolean addPlayer(String playerName) throws PlayerNameEmptyException, GameFullException {
-		if(isNotValidPlayerName(playerName)) {
+
+	public boolean addPlayer(String playerName)
+			throws PlayerNameEmptyException, GameFullException,
+			RepeatedPlayernameException {
+		if (isNotValidPlayerName(playerName)) {
 			throw new PlayerNameEmptyException();
-		} else if(this.players.size() >= Game.MINPLAYERNUMBER) {
+		} else if (isFullOfPlayers()) {
 			throw new GameFullException();
+		} else if (hasPlayerName(playerName)) {
+			throw new RepeatedPlayernameException();
 		} else {
 			this.players.add(playerName);
 			return true;
 		}
 	}
-	
+
 	private boolean isNotValidPlayerName(String playerName) {
 		return playerName.trim().equals("") || playerName.equals(null);
+	}
+
+	private boolean isFullOfPlayers() {
+		return this.players.size() >= this.playerNumber;
+	}
+
+	private boolean hasPlayerName(String playerName) {
+		for (String player : this.players) {
+			if (player.equals(playerName)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
